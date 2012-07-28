@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/edtMasterPassword"
+        android:onClick="btnClick"
         android:text="Unlock" />
 
     <ListView
