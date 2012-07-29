@@ -1,28 +1,31 @@
 package com.example.password.manager;
 
-import com.example.password.manager.passworddetails.PasswordDetails;
-import com.example.password.manager.unlock.UnlockDialog;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
-public class MainActivity extends Activity
+import com.example.password.manager.database.providers.PasswordsContentProvider;
+import com.example.password.manager.passworddetails.PasswordDetails;
+import com.example.password.manager.unlock.UnlockDialog;
+
+public class MainActivity extends FragmentActivity 
+	implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener
 {
-
-	private static final String	MASTER_PASSWORD	= "StupidFuckingPasswords";
-
-	private boolean				_bUnlocked		= false;
+	private static int 			LOADER_PASSWORDS	= 0;
+	private boolean				_bUnlocked			= false;
+	
+	private ListView			_lstPasswords;
+	private PasswordRowAdapter	_adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -30,7 +33,14 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//TODO Create a cursor loader to populate the list.
+		_adapter = new PasswordRowAdapter(this, null, false);
+		
+		_lstPasswords = (ListView) findViewById(R.id.lstPasswords);
+		_lstPasswords.setAdapter(_adapter);
+		_lstPasswords.setOnItemClickListener(this);
+		
+		// Create a cursor loader to populate the list.
+		getSupportLoaderManager().initLoader(LOADER_PASSWORDS, null, this);
 	}
 
 	@Override
@@ -48,7 +58,7 @@ public class MainActivity extends Activity
 		switch (item.getItemId())
 		{
 			case R.id.mniAdd:
-				Intent intDetails = new Intent(this, PasswordDetails.class);
+				Intent intDetails = PasswordDetails.createIntent(this, PasswordDetails.NEW_RECORD);
 				startActivity(intDetails);
 				break;
 
@@ -66,6 +76,35 @@ public class MainActivity extends Activity
 		{
 			new UnlockDialog(this).show();
 		}
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle)
+	{
+		String[] projection = { PasswordsContentProvider._ID, PasswordsContentProvider.NAME };
+		 
+	    CursorLoader cursorLoader = new CursorLoader(this,
+	    		PasswordsContentProvider.CONTENT_URI, projection, null, null, PasswordsContentProvider.NAME);
+	    return cursorLoader;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
+	{
+		_adapter.swapCursor(cursor);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> l)
+	{
+		_adapter.swapCursor(null);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		Intent intDetails = PasswordDetails.createIntent(this, id);
+		startActivity(intDetails);
 	}
 
 }

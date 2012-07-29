@@ -20,12 +20,17 @@ import android.widget.TextView;
  */
 public class PasswordRowAdapter extends CursorAdapter
 {
-	final boolean _bUnlocked;
+	boolean _bUnlocked;
 
 	public PasswordRowAdapter(Context context, Cursor c, final boolean bUnlocked)
 	{
 		super(context, c, 0);
 
+		_bUnlocked = bUnlocked;
+	}
+	
+	public void setUnlocked(final boolean bUnlocked)
+	{
 		_bUnlocked = bUnlocked;
 	}
 
