@@ -14,6 +14,6 @@
             android:authorities="com.example.password.manager.database.providers.passwordscontentprovider" android:name="com.example.password.manager.database.providers.PasswordsContentProvider"/>
         <provider
             android:authorities="com.example.password.manager.database.providers.configurationcontentprovider" android:name="com.example.password.manager.database.providers.ConfigurationContentProvider"/>
-        <activity android:name="PasswordDetails" android:label="Password Details"></activity>
+        <activity android:name=".passworddetails.PasswordDetails" android:label="Password Details"></activity>
     </application>
 </manifest>
