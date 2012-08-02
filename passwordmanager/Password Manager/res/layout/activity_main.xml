@@ -3,24 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/btnUnlock"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/lblPrompt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/edtMasterPassword"
-        android:layout_marginTop="20dip"
-        android:onClick="btnClick"
-        android:text="Unlock" />
+        android:gravity="center_horizontal"
+        android:text="Password manager is currently LOCKED, please press the padlock to unlock and decrypt your passwords."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
         android:id="@+id/lstPasswords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/btnUnlock"
-        android:layout_marginTop="20dip" >
+        android:layout_below="@+id/btnUnlock" >
 
     </ListView>
+
+    <Button
+        android:id="@+id/btnUnlock"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/lblPrompt"
+        android:onClick="btnClick"
+        android:text="Unlock" />
 
 </RelativeLayout>

@@ -17,11 +17,27 @@ import android.widget.Toast;
  */
 public class UnlockDialog extends AlertDialog implements OnClickListener
 {
+	public interface IUnlockDialog
+	{
+		public void unlock(final boolean bUnlocked);
+	}
+	
 	private final EditText	_edtPassword;
+	private IUnlockDialog	_interface;
 
 	public UnlockDialog(Context context)
 	{
 		super(context);
+		
+		try
+		{
+			_interface = (IUnlockDialog)context;
+		}
+		catch (ClassCastException e)
+		{
+			throw new ClassCastException(context.toString() + " must  implement " + 
+					IUnlockDialog.class.toString());
+		}
 		
 		_edtPassword = new EditText(context);
 		_edtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -36,14 +52,21 @@ public class UnlockDialog extends AlertDialog implements OnClickListener
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
+		final boolean bUnlocked;
 		final String strPasswod = _edtPassword.getText().toString().trim();
 		
 		if (strPasswod.equalsIgnoreCase("StupidFuckingPasswords"))
 		{
 			Toast.makeText(getContext(), "Program Unlocked", Toast.LENGTH_LONG).show();
+			bUnlocked = true;
 		}
 		else
+		{
 			Toast.makeText(getContext(), "Incorrect Password - Program  Still Locked", Toast.LENGTH_LONG).show();
+			bUnlocked = false;
+		}
+		
+		_interface.unlock(bUnlocked);
 	}
 
 	

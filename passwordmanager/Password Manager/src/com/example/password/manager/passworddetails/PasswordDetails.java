@@ -1,6 +1,5 @@
 package com.example.password.manager.passworddetails;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,8 +13,8 @@ import android.widget.EditText;
 
 import com.example.password.manager.R;
 import com.example.password.manager.database.providers.PasswordsContentProvider;
+import com.example.password.manager.helperclasses.GPContentValues;
 import com.example.password.manager.helperclasses.GPCursorHelper;
-import com.mentorbs.encryption.MBSEncryption;
 
 public class PasswordDetails extends FragmentActivity 
 	implements LoaderCallbacks<Cursor>
@@ -40,7 +39,7 @@ public class PasswordDetails extends FragmentActivity
 	private long _lRowID = NEW_RECORD;
 	
 	private final String[] _lstCols;
-
+	private DataSnapshot _initialVals;
 	
 	
 	public PasswordDetails()
@@ -77,20 +76,24 @@ public class PasswordDetails extends FragmentActivity
 		{
 			getSupportLoaderManager().initLoader(LOADER_DETAILS, null, this);
 		}
+		else
+			_initialVals = new DataSnapshot();
 	}
 
 	@Override
 	protected void onPause()
 	{
-		// TODO Create a GPContentValues which will auto encrypt values.
-		// TODO Check if any values have changed before saving.
-		ContentValues vals = new ContentValues();
-		vals.put(PasswordsContentProvider.NAME, getNameEncrypted());
-		vals.put(PasswordsContentProvider.USERNAME, getUserNameEncrypted());
-		vals.put(PasswordsContentProvider.PASSWORD, getPasswordEncrypted());
-		vals.put(PasswordsContentProvider.NOTES, getNotesEncrypted());
-		
-		//getContentResolver().insert(PasswordsContentProvider.CONTENT_URI, vals);
+		//if (!_initialVals.equals(new DataSnapshot()))
+		if (_initialVals.hasChanged())
+		{
+			GPContentValues vals = new GPContentValues();
+			vals.put(PasswordsContentProvider.NAME, getName());
+			vals.put(PasswordsContentProvider.USERNAME, getUserName());
+			vals.put(PasswordsContentProvider.PASSWORD, getPassword());
+			vals.put(PasswordsContentProvider.NOTES, getNotes());
+			
+			getContentResolver().insert(PasswordsContentProvider.CONTENT_URI, vals.getContentValues());
+		}
 		
 		super.onPause();
 	}
@@ -115,26 +118,6 @@ public class PasswordDetails extends FragmentActivity
 		return _edtName.getText().toString().trim();
 	}
 	
-	private String getNotesEncrypted()
-	{
-		return MBSEncryption.EncryptStringToHexString(getNotes());
-	}
-
-	private String getPasswordEncrypted()
-	{
-		return MBSEncryption.EncryptStringToHexString(getPassword());
-	}
-
-	private String getUserNameEncrypted()
-	{
-		return MBSEncryption.EncryptStringToHexString(getUserName());
-	}
-
-	private String getNameEncrypted()
-	{
-		return MBSEncryption.EncryptStringToHexString(getName());
-	}
-
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
@@ -181,5 +164,68 @@ public class PasswordDetails extends FragmentActivity
 		_edtUserNanme.setText(strUserName);
 		_edtPassword.setText(strPassword);
 		_edtNotes.setText(strNotes);
+		
+		_initialVals = new DataSnapshot();
+	}
+	
+	/**
+	 * Takes a snapshot of the data at the current time.
+	 * 
+	 * @author Administrator
+	 */
+	private class DataSnapshot
+	{
+		private final String strName, strUserName, strPassword, strNotes;
+
+		/**
+		 * Constructor, creates a new {@link DataSnapshot} object.
+		 */
+		public DataSnapshot()
+		{
+			super();
+
+			strName = getName();
+			strUserName = getUserName();
+			strPassword = getPassword();
+			strNotes = getNotes();
+		}
+
+		/**
+		 * Checks if the data in this {@link DataSnapshot} is equal to the data
+		 * in the passed {@link DataSnapshot}. 
+		 */
+		@Override
+		public boolean equals(Object o)
+		{
+			boolean bEquals = false;
+			
+			try
+			{
+				DataSnapshot snapShot = (DataSnapshot)o;
+				
+				bEquals =	(this.strName.equals(snapShot.strName)) &&
+							(this.strUserName.equals(snapShot.strUserName)) &&
+							(this.strPassword.equals(snapShot.strPassword)) &&
+							(this.strNotes.equals(snapShot.strNotes));
+			}
+			catch (ClassCastException e)
+			{
+				throw new ClassCastException(o.toString() + " must be an instance of " + 
+						DataSnapshot.class.toString());
+			}
+			
+			return bEquals;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			throw new UnsupportedOperationException("This method has not been implemented");
+		}
+		
+		public boolean hasChanged()
+		{
+			return !equals(new DataSnapshot());
+		}
 	}
 }

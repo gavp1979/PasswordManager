@@ -17,9 +17,10 @@ import android.widget.ListView;
 import com.example.password.manager.database.providers.PasswordsContentProvider;
 import com.example.password.manager.passworddetails.PasswordDetails;
 import com.example.password.manager.unlock.UnlockDialog;
+import com.example.password.manager.unlock.UnlockDialog.IUnlockDialog;
 
 public class MainActivity extends FragmentActivity 
-	implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener
+	implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, IUnlockDialog
 {
 	private static int 			LOADER_PASSWORDS	= 0;
 	private boolean				_bUnlocked			= false;
@@ -105,6 +106,14 @@ public class MainActivity extends FragmentActivity
 	{
 		Intent intDetails = PasswordDetails.createIntent(this, id);
 		startActivity(intDetails);
+	}
+
+	@Override
+	public void unlock(boolean bUnlocked)
+	{
+		_bUnlocked = bUnlocked;
+		_adapter._bUnlocked = this._bUnlocked;
+		getSupportLoaderManager().restartLoader(LOADER_PASSWORDS, null, this);
 	}
 
 }

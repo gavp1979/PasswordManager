@@ -45,7 +45,7 @@ public class PasswordRowAdapter extends CursorAdapter
 		String strNameData = cursor.getString(cursor.getColumnIndex(PasswordsContentProvider.NAME));
 		
 		if (_bUnlocked)
-			strNameData = MBSEncryption.EncryptStringToHexString(strNameData);
+			strNameData = MBSEncryption.DecryptHexStringToString(strNameData);
 		
 		NameData.setText(strNameData);
 	}
