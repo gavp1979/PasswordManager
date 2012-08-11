@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/mniSettings" android:title="Settings"></item>
     <item android:id="@+id/mniAdd" android:titleCondensed="Add" android:title="Add New Password"></item>
+    <item android:id="@+id/mniChangePassword" android:title="Change Password" android:titleCondensed="Password"></item>
     
 
 </menu>
