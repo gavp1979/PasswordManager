@@ -1,8 +1,9 @@
 /**
  * 
  */
-package com.example.password.manager;
+package uk.co.parkesfamily.password.manager;
 
+import com.example.password.manager.R;
 import com.example.password.manager.database.providers.PasswordsContentProvider;
 import com.example.password.manager.helperclasses.GPCursorHelper;
 import com.mentorbs.encryption.MBSEncryption;

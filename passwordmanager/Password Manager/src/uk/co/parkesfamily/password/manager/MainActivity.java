@@ -1,4 +1,4 @@
-package com.example.password.manager;
+package uk.co.parkesfamily.password.manager;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.password.manager.R;
 import com.example.password.manager.database.providers.PasswordsContentProvider;
 import com.example.password.manager.masterpassword.MasterPasswordScreen;
 import com.example.password.manager.passworddetails.PasswordDetails;
