@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.password.manager.R;
+import uk.co.parkesfamily.password.manager.R;
 
 public class MainActivity extends FragmentActivity 
 	implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, IUnlockDialog

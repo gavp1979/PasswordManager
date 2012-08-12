@@ -28,7 +28,7 @@ public class ConfigurationContentProvider extends ContentProvider {
 	private DBOpenHelper dbHelper;
 	private static HashMap<String, String> CONFIGURATION_PROJECTION_MAP;
 	private static final String TABLE_NAME = "configuration";
-	private static final String AUTHORITY = "com.example.password.manager.database.providers.configurationcontentprovider";
+	private static final String AUTHORITY = "uk.co.parkesfamily.password.manager.database.providers.configurationcontentprovider";
 
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + TABLE_NAME);
@@ -90,11 +90,11 @@ public class ConfigurationContentProvider extends ContentProvider {
 	public String getType(Uri url) {
 		switch (URL_MATCHER.match(url)) {
 		case CONFIGURATION:
-			return "vnd.android.cursor.dir/vnd.com.example.password.manager.database.providers.configuration";
+			return "vnd.android.cursor.dir/vnd.uk.co.parkesfamily.password.manager.database.providers.configuration";
 		case CONFIGURATION__ID:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.configuration";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.configuration";
 		case CONFIGURATION_PASSWORD:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.configuration";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.configuration";
 
 		default:
 			throw new IllegalArgumentException("Unknown URL " + url);

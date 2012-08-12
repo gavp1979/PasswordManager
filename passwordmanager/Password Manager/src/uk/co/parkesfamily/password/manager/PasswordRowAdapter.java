@@ -6,7 +6,7 @@ package uk.co.parkesfamily.password.manager;
 import uk.co.parkesfamily.password.manager.database.providers.PasswordsContentProvider;
 import uk.co.parkesfamily.password.manager.helperclasses.GPCursorHelper;
 
-import com.example.password.manager.R;
+import uk.co.parkesfamily.password.manager.R;
 import com.mentorbs.encryption.MBSEncryption;
 
 import android.content.Context;

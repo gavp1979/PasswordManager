@@ -28,7 +28,7 @@ public class PasswordsContentProvider extends ContentProvider {
 	private DBOpenHelper dbHelper;
 	private static HashMap<String, String> PASSWORDS_PROJECTION_MAP;
 	private static final String TABLE_NAME = "passwords";
-	private static final String AUTHORITY = "com.example.password.manager.database.providers.passwordscontentprovider";
+	private static final String AUTHORITY = "uk.co.parkesfamily.password.manager.database.providers.passwordscontentprovider";
 
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + TABLE_NAME);
@@ -114,17 +114,17 @@ public class PasswordsContentProvider extends ContentProvider {
 	public String getType(Uri url) {
 		switch (URL_MATCHER.match(url)) {
 		case PASSWORDS:
-			return "vnd.android.cursor.dir/vnd.com.example.password.manager.database.providers.passwords";
+			return "vnd.android.cursor.dir/vnd.uk.co.parkesfamily.password.manager.database.providers.passwords";
 		case PASSWORDS__ID:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.passwords";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.passwords";
 		case PASSWORDS_NAME:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.passwords";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.passwords";
 		case PASSWORDS_USERNAME:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.passwords";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.passwords";
 		case PASSWORDS_PASSWORD:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.passwords";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.passwords";
 		case PASSWORDS_NOTES:
-			return "vnd.android.cursor.item/vnd.com.example.password.manager.database.providers.passwords";
+			return "vnd.android.cursor.item/vnd.uk.co.parkesfamily.password.manager.database.providers.passwords";
 
 		default:
 			throw new IllegalArgumentException("Unknown URL " + url);

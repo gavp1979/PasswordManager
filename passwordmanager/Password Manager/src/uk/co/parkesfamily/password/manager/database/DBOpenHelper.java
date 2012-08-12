@@ -51,7 +51,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBOpenHelper extends SQLiteOpenHelper {
 
 	// Android's default system path for your application's database.
-	private static String DB_PATH = "/data/data/com.example.password.manager/databases/";
+	private static String DB_PATH = "/data/data/uk.co.parkesfamily.password.manager/databases/";
 
 	private static String DB_NAME = "PasswordManager.DB";
 

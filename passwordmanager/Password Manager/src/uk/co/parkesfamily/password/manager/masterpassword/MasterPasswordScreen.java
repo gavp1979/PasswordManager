@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.example.password.manager.R;
+import uk.co.parkesfamily.password.manager.R;
 
 /**
  * @author Administrator

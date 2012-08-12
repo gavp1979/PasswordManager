@@ -14,7 +14,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.widget.EditText;
 
-import com.example.password.manager.R;
+import uk.co.parkesfamily.password.manager.R;
 
 public class PasswordDetails extends FragmentActivity implements LoaderCallbacks<Cursor>
 {
