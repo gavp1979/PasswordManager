@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.example.password.manager.unlock;
+package uk.co.parkesfamily.password.manager.unlock;
 
 import android.app.AlertDialog;
 import android.content.Context;

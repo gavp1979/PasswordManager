@@ -1,4 +1,4 @@
-package com.example.password.manager.masterpassword;
+package uk.co.parkesfamily.password.manager.masterpassword;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

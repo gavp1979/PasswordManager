@@ -1,4 +1,4 @@
-package com.example.password.manager.helperclasses;
+package uk.co.parkesfamily.password.manager.helperclasses;
 
 import com.mentorbs.encryption.MBSEncryption;
 

@@ -1,5 +1,10 @@
 package uk.co.parkesfamily.password.manager;
 
+import uk.co.parkesfamily.password.manager.database.providers.PasswordsContentProvider;
+import uk.co.parkesfamily.password.manager.masterpassword.MasterPasswordScreen;
+import uk.co.parkesfamily.password.manager.passworddetails.PasswordDetails;
+import uk.co.parkesfamily.password.manager.unlock.UnlockDialog;
+import uk.co.parkesfamily.password.manager.unlock.UnlockDialog.IUnlockDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -18,11 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.password.manager.R;
-import com.example.password.manager.database.providers.PasswordsContentProvider;
-import com.example.password.manager.masterpassword.MasterPasswordScreen;
-import com.example.password.manager.passworddetails.PasswordDetails;
-import com.example.password.manager.unlock.UnlockDialog;
-import com.example.password.manager.unlock.UnlockDialog.IUnlockDialog;
 
 public class MainActivity extends FragmentActivity 
 	implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, IUnlockDialog

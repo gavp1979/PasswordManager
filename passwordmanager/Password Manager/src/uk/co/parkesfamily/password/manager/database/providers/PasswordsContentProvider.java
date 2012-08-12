@@ -10,9 +10,11 @@
  * in your installation folder.                                               *
  ******************************************************************************
  */
-package com.example.password.manager.database.providers;
+package uk.co.parkesfamily.password.manager.database.providers;
 
 import java.util.*;
+
+import uk.co.parkesfamily.password.manager.database.*;
 
 import android.content.*;
 import android.database.*;
@@ -20,7 +22,6 @@ import android.database.sqlite.*;
 import android.net.*;
 import android.text.*;
 
-import com.example.password.manager.database.*;
 
 public class PasswordsContentProvider extends ContentProvider {
 

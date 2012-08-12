@@ -10,7 +10,7 @@
  * in your installation folder.                                               *
  ******************************************************************************
  */
-package com.example.password.manager.database;
+package uk.co.parkesfamily.password.manager.database;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

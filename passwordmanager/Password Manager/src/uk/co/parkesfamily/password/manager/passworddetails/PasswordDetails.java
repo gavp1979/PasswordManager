@@ -1,5 +1,8 @@
-package com.example.password.manager.passworddetails;
+package uk.co.parkesfamily.password.manager.passworddetails;
 
+import uk.co.parkesfamily.password.manager.database.providers.PasswordsContentProvider;
+import uk.co.parkesfamily.password.manager.helperclasses.GPContentValues;
+import uk.co.parkesfamily.password.manager.helperclasses.GPCursorHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,9 +15,6 @@ import android.support.v4.content.Loader;
 import android.widget.EditText;
 
 import com.example.password.manager.R;
-import com.example.password.manager.database.providers.PasswordsContentProvider;
-import com.example.password.manager.helperclasses.GPContentValues;
-import com.example.password.manager.helperclasses.GPCursorHelper;
 
 public class PasswordDetails extends FragmentActivity implements LoaderCallbacks<Cursor>
 {
