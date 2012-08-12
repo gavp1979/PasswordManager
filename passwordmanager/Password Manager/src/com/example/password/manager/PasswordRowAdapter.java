@@ -4,6 +4,7 @@
 package com.example.password.manager;
 
 import com.example.password.manager.database.providers.PasswordsContentProvider;
+import com.example.password.manager.helperclasses.GPCursorHelper;
 import com.mentorbs.encryption.MBSEncryption;
 
 import android.content.Context;
@@ -16,11 +17,11 @@ import android.widget.TextView;
 
 /**
  * @author Administrator
- *
+ * 
  */
 public class PasswordRowAdapter extends CursorAdapter
 {
-	boolean _bUnlocked;
+	boolean	_bUnlocked;
 
 	public PasswordRowAdapter(Context context, Cursor c, final boolean bUnlocked)
 	{
@@ -28,35 +29,49 @@ public class PasswordRowAdapter extends CursorAdapter
 
 		_bUnlocked = bUnlocked;
 	}
-	
+
 	public void setUnlocked(final boolean bUnlocked)
 	{
 		_bUnlocked = bUnlocked;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.widget.CursorAdapter#bindView(android.view.View, android.content.Context, android.database.Cursor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.support.v4.widget.CursorAdapter#bindView(android.view.View,
+	 * android.content.Context, android.database.Cursor)
 	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor)
 	{
-		TextView NameData = (TextView)view.findViewById(R.id.NameData);
-		
-		String strNameData = cursor.getString(cursor.getColumnIndex(PasswordsContentProvider.NAME));
-		
-		if (_bUnlocked)
-			strNameData = MBSEncryption.DecryptHexStringToString(strNameData);
-		
+		TextView NameData = (TextView) view.findViewById(R.id.NameData);
+
+		/*
+		 * String strNameData =
+		 * cursor.getString(cursor.getColumnIndex(PasswordsContentProvider
+		 * .NAME));
+		 * 
+		 * if (_bUnlocked) strNameData =
+		 * MBSEncryption.DecryptHexStringToString(strNameData);
+		 */
+		String strNameData = GPCursorHelper.getStringDecrypted(cursor,
+				PasswordsContentProvider.NAME, _bUnlocked);
+
 		NameData.setText(strNameData);
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.widget.CursorAdapter#newView(android.content.Context, android.database.Cursor, android.view.ViewGroup)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.support.v4.widget.CursorAdapter#newView(android.content.Context,
+	 * android.database.Cursor, android.view.ViewGroup)
 	 */
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent)
 	{
-		View view =  LayoutInflater.from(context).inflate(R.layout.password_row, parent, false);
+		View view = LayoutInflater.from(context).inflate(R.layout.password_row, parent,
+				false);
 		return view;
 	}
 

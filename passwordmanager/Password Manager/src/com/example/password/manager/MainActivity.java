@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity
 		switch (item.getItemId())
 		{
 			case R.id.mniAdd:
-				Intent intDetails = PasswordDetails.createIntent(this, PasswordDetails.NEW_RECORD);
+				Intent intDetails = PasswordDetails.createIntent(this, PasswordDetails.NEW_RECORD, _bUnlocked);
 				startActivity(intDetails);
 				break;
 				
@@ -125,7 +125,7 @@ public class MainActivity extends FragmentActivity
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		Intent intDetails = PasswordDetails.createIntent(this, id);
+		Intent intDetails = PasswordDetails.createIntent(this, id, _bUnlocked);
 		startActivity(intDetails);
 	}
 
@@ -138,13 +138,13 @@ public class MainActivity extends FragmentActivity
 		{
 			_btnUnlock.setCompoundDrawablesWithIntrinsicBounds(null, null, _drawUnlocked, null);
 			_txtPrompt.setText(R.string.unlocked_prompt);
-			_btnUnlock.setText(R.string.unlock);
+			_btnUnlock.setText(R.string.lock);
 		}
 		else
 		{
 			_btnUnlock.setCompoundDrawablesWithIntrinsicBounds(null, null, _drawLocked, null);
 			_txtPrompt.setText(R.string.locked_prompt);
-			_btnUnlock.setText(R.string.lock);
+			_btnUnlock.setText(R.string.unlock);
 		}
 			
 		getSupportLoaderManager().restartLoader(LOADER_PASSWORDS, null, this);

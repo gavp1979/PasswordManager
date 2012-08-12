@@ -5,8 +5,8 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Password Manager</string>
     <string name="locked_prompt">Password manager is currently LOCKED, please press the padlock to unlock and decrypt your passwords.</string>
-    
     <string name="unlocked_prompt">Password manager is currently UNLOCKED, please press the padlock to lock and encrypt your passwords.</string>
-<string name="unlock">Unlock</string>
-<string name="lock">Lock</string>
+    <string name="unlock">Unlock</string>
+    <string name="lock">Lock</string>
+
 </resources>

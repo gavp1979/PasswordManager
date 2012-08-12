@@ -16,62 +16,87 @@ import com.example.password.manager.database.providers.PasswordsContentProvider;
 import com.example.password.manager.helperclasses.GPContentValues;
 import com.example.password.manager.helperclasses.GPCursorHelper;
 
-public class PasswordDetails extends FragmentActivity 
-	implements LoaderCallbacks<Cursor>
+public class PasswordDetails extends FragmentActivity implements LoaderCallbacks<Cursor>
 {
+	/**
+	 * Collection of keys to use when populating or retrieving values from the
+	 * launching {@link Intent}.
+	 * 
+	 * @author Administrator
+	 */
 	public static class ExtraFields
 	{
-		public static final String RECNO	= "RecordNumber";
+		/**
+		 * Key for _id value of record to display.
+		 */
+		public static final String	RECNO		= "RecordNumber";
+		/**
+		 * <code>true</code> if program is unlocked, <code>false</code> if
+		 * program is locked.
+		 */
+		public static final String	Unlocked	= "Unlocked";
 	}
-	
-	public static Intent createIntent(final Context context, final long lRecNo)
+
+	/**
+	 * Static class to create an {@link Intent} capable of starting this
+	 * activity.
+	 * 
+	 * @param context
+	 *            The launching {@link Intent#}
+	 * @param lRecNo
+	 *            The _id value of the record to launch.
+	 * @param bUnlocked
+	 *            <code>true</code> if program is unlocked, <code>false</code>
+	 *            if program is locked.
+	 * @return The populated intent.
+	 */
+	public static Intent createIntent(final Context context, final long lRecNo,
+			final boolean bUnlocked)
 	{
 		Intent intResult = new Intent(context, PasswordDetails.class);
 		intResult.putExtra(ExtraFields.RECNO, lRecNo);
-		
+		intResult.putExtra(ExtraFields.Unlocked, bUnlocked);
+
 		return intResult;
 	}
-	
-	public static long	NEW_RECORD	= -100;
-	public static int	LOADER_DETAILS	= 0;
-	
-	private EditText _edtName, _edtUserNanme, _edtPassword, _edtNotes;
-	private long _lRowID = NEW_RECORD;
-	
-	private final String[] _lstCols;
-	private DataSnapshot _initialVals;
-	
-	
+
+	public static long		NEW_RECORD		= -100;
+	public static int		LOADER_DETAILS	= 0;
+
+	private EditText		_edtName, _edtUserNanme, _edtPassword, _edtNotes;
+	private long			_lRowID			= NEW_RECORD;
+	private boolean			_bUnlocked;
+
+	private final String[]	_lstCols;
+	private DataSnapshot	_initialVals;
+
 	public PasswordDetails()
 	{
 		super();
 
-		_lstCols = new String[] {
-				PasswordsContentProvider._ID,
-				PasswordsContentProvider.NAME,
-				PasswordsContentProvider.USERNAME,
-				PasswordsContentProvider.PASSWORD,
-				PasswordsContentProvider.NOTES
-				};
+		_lstCols = new String[] { PasswordsContentProvider._ID,
+				PasswordsContentProvider.NAME, PasswordsContentProvider.USERNAME,
+				PasswordsContentProvider.PASSWORD, PasswordsContentProvider.NOTES };
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
+	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.password_detail);
-		
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
 		{
 			_lRowID = extras.getLong(ExtraFields.RECNO);
+			_bUnlocked = extras.getBoolean(ExtraFields.Unlocked);
 		}
-		
-		_edtName = (EditText)findViewById(R.id.edtName);
-		_edtUserNanme = (EditText)findViewById(R.id.edtUserName);
-		_edtPassword = (EditText)findViewById(R.id.edtPassword);
-		_edtNotes = (EditText)findViewById(R.id.edtNotes);
-		
+
+		_edtName = (EditText) findViewById(R.id.edtName);
+		_edtUserNanme = (EditText) findViewById(R.id.edtUserName);
+		_edtPassword = (EditText) findViewById(R.id.edtPassword);
+		_edtNotes = (EditText) findViewById(R.id.edtNotes);
+
 		if (_lRowID != NEW_RECORD)
 		{
 			getSupportLoaderManager().initLoader(LOADER_DETAILS, null, this);
@@ -83,7 +108,7 @@ public class PasswordDetails extends FragmentActivity
 	@Override
 	protected void onPause()
 	{
-		//if (!_initialVals.equals(new DataSnapshot()))
+		// if (!_initialVals.equals(new DataSnapshot()))
 		if (_initialVals.hasChanged())
 		{
 			GPContentValues vals = new GPContentValues();
@@ -91,10 +116,11 @@ public class PasswordDetails extends FragmentActivity
 			vals.put(PasswordsContentProvider.USERNAME, getUserName());
 			vals.put(PasswordsContentProvider.PASSWORD, getPassword());
 			vals.put(PasswordsContentProvider.NOTES, getNotes());
-			
-			getContentResolver().insert(PasswordsContentProvider.CONTENT_URI, vals.getContentValues());
+
+			getContentResolver().insert(PasswordsContentProvider.CONTENT_URI,
+					vals.getContentValues());
 		}
-		
+
 		super.onPause();
 	}
 
@@ -117,17 +143,17 @@ public class PasswordDetails extends FragmentActivity
 	{
 		return _edtName.getText().toString().trim();
 	}
-	
+
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
 		Uri.Builder builder = PasswordsContentProvider._ID_FIELD_CONTENT_URI.buildUpon();
 		builder.appendPath(Long.toString(_lRowID));
 		Uri uri = builder.build();
-		
-		
-		CursorLoader cursorLoader = new CursorLoader(this, uri, _lstCols, null, null, null);
-	    return cursorLoader;
+
+		CursorLoader cursorLoader = new CursorLoader(this, uri, _lstCols, null, null,
+				null);
+		return cursorLoader;
 	}
 
 	@Override
@@ -141,33 +167,38 @@ public class PasswordDetails extends FragmentActivity
 	{
 		populateData(null);
 	}
-	
+
 	public void populateData(Cursor cursor)
 	{
 		final String strName, strUserName, strPassword, strNotes;
-		
+
 		if (cursor != null)
 		{
 			cursor.moveToFirst();
-			
-			strName = GPCursorHelper.getStringDecrypted(cursor, PasswordsContentProvider.NAME);
-			strUserName = GPCursorHelper.getStringDecrypted(cursor, PasswordsContentProvider.USERNAME);
-			strPassword = GPCursorHelper.getStringDecrypted(cursor, PasswordsContentProvider.PASSWORD);
-			strNotes = GPCursorHelper.getStringDecrypted(cursor, PasswordsContentProvider.NOTES);;
+
+			strName = GPCursorHelper.getStringDecrypted(cursor,
+					PasswordsContentProvider.NAME, _bUnlocked);
+			strUserName = GPCursorHelper.getStringDecrypted(cursor,
+					PasswordsContentProvider.USERNAME, _bUnlocked);
+			strPassword = GPCursorHelper.getStringDecrypted(cursor,
+					PasswordsContentProvider.PASSWORD, _bUnlocked);
+			strNotes = GPCursorHelper.getStringDecrypted(cursor,
+					PasswordsContentProvider.NOTES, _bUnlocked);
+			;
 		}
 		else
 		{
 			strName = strUserName = strPassword = strNotes = "";
 		}
-		
+
 		_edtName.setText(strName);
 		_edtUserNanme.setText(strUserName);
 		_edtPassword.setText(strPassword);
 		_edtNotes.setText(strNotes);
-		
+
 		_initialVals = new DataSnapshot();
 	}
-	
+
 	/**
 	 * Takes a snapshot of the data at the current time.
 	 * 
@@ -175,7 +206,7 @@ public class PasswordDetails extends FragmentActivity
 	 */
 	private class DataSnapshot
 	{
-		private final String strName, strUserName, strPassword, strNotes;
+		private final String	strName, strUserName, strPassword, strNotes;
 
 		/**
 		 * Constructor, creates a new {@link DataSnapshot} object.
@@ -192,37 +223,38 @@ public class PasswordDetails extends FragmentActivity
 
 		/**
 		 * Checks if the data in this {@link DataSnapshot} is equal to the data
-		 * in the passed {@link DataSnapshot}. 
+		 * in the passed {@link DataSnapshot}.
 		 */
 		@Override
 		public boolean equals(Object o)
 		{
 			boolean bEquals = false;
-			
+
 			try
 			{
-				DataSnapshot snapShot = (DataSnapshot)o;
-				
-				bEquals =	(this.strName.equals(snapShot.strName)) &&
-							(this.strUserName.equals(snapShot.strUserName)) &&
-							(this.strPassword.equals(snapShot.strPassword)) &&
-							(this.strNotes.equals(snapShot.strNotes));
+				DataSnapshot snapShot = (DataSnapshot) o;
+
+				bEquals = (this.strName.equals(snapShot.strName))
+						&& (this.strUserName.equals(snapShot.strUserName))
+						&& (this.strPassword.equals(snapShot.strPassword))
+						&& (this.strNotes.equals(snapShot.strNotes));
 			}
 			catch (ClassCastException e)
 			{
-				throw new ClassCastException(o.toString() + " must be an instance of " + 
-						DataSnapshot.class.toString());
+				throw new ClassCastException(o.toString() + " must be an instance of "
+						+ DataSnapshot.class.toString());
 			}
-			
+
 			return bEquals;
 		}
 
 		@Override
 		public int hashCode()
 		{
-			throw new UnsupportedOperationException("This method has not been implemented");
+			throw new UnsupportedOperationException(
+					"This method has not been implemented");
 		}
-		
+
 		public boolean hasChanged()
 		{
 			return !equals(new DataSnapshot());
