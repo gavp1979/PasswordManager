@@ -7,6 +7,28 @@ import android.database.Cursor;
 public class GPCursorHelper
 {
 	/**
+	 * Checks if the passed {@link Cursor} is not null and is open.
+	 * @param cursor The {@link Cursor} to check.
+	 * @return <code>true</code> if {@link Cursor} is open, <code>false</code> if
+	 * it is closed.
+	 */
+	public static boolean isOpen(final Cursor cursor)
+	{
+		return (cursor != null) && (!cursor.isClosed());
+	}
+	
+	/**
+	 * Checks if the passed cursor has at least 1 record.
+	 * @param cursor The {@link Cursor} to check.
+	 * @return <code>true</code> if the {@link Cursor} has at least 1 record,
+	 * <code>false</code> if not.
+	 */
+	public static boolean hasRecords(final Cursor cursor)
+	{
+		return (isOpen(cursor)) && (cursor.getCount() > 0);
+	}
+	
+	/**
 	 * Retrieves a {@link String} value from the {@link Cursor}.
 	 * 
 	 * @param cursor

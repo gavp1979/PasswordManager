@@ -1,5 +1,6 @@
 package uk.co.parkesfamily.password.manager.passworddetails;
 
+import uk.co.parkesfamily.password.manager.R;
 import uk.co.parkesfamily.password.manager.database.providers.PasswordsContentProvider;
 import uk.co.parkesfamily.password.manager.helperclasses.GPContentValues;
 import uk.co.parkesfamily.password.manager.helperclasses.GPCursorHelper;
@@ -12,12 +13,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
-
-import uk.co.parkesfamily.password.manager.R;
+import android.widget.Toast;
 
 public class PasswordDetails extends FragmentActivity implements LoaderCallbacks<Cursor>
 {
+	private static final Uri	CONTENT_URI	= PasswordsContentProvider.CONTENT_URI;
+	private static final String _strFilter = PasswordsContentProvider._ID + " = ?";
+
+
 	/**
 	 * Collection of keys to use when populating or retrieving values from the
 	 * launching {@link Intent}.
@@ -100,15 +106,28 @@ public class PasswordDetails extends FragmentActivity implements LoaderCallbacks
 		if (_lRowID != NEW_RECORD)
 		{
 			getSupportLoaderManager().initLoader(LOADER_DETAILS, null, this);
+			enableForm(false);
 		}
 		else
+		{
 			_initialVals = new DataSnapshot();
+			enableForm(true);
+		}
 	}
 
 	@Override
 	protected void onPause()
 	{
-		// if (!_initialVals.equals(new DataSnapshot()))
+		saveRecord();
+
+		super.onPause();
+	}
+
+	/**
+	 * Saves the current record.
+	 */
+	private void saveRecord()
+	{
 		if (_initialVals.hasChanged())
 		{
 			GPContentValues vals = new GPContentValues();
@@ -117,11 +136,18 @@ public class PasswordDetails extends FragmentActivity implements LoaderCallbacks
 			vals.put(PasswordsContentProvider.PASSWORD, getPassword());
 			vals.put(PasswordsContentProvider.NOTES, getNotes());
 
-			getContentResolver().insert(PasswordsContentProvider.CONTENT_URI,
-					vals.getContentValues());
+			if (_lRowID == NEW_RECORD)
+			{
+				Uri uri = getContentResolver().insert(CONTENT_URI,
+						vals.getContentValues());
+				// TODO PArse the uri to get the new _id and assign it to _lRowID.
+			}
+			else
+			{
+				getContentResolver().update(CONTENT_URI, vals.getContentValues(), 
+						_strFilter, new String[]{Long.toString(_lRowID)}); 
+			}
 		}
-
-		super.onPause();
 	}
 
 	private String getNotes()
@@ -168,11 +194,15 @@ public class PasswordDetails extends FragmentActivity implements LoaderCallbacks
 		populateData(null);
 	}
 
+	/**
+	 * Populates the form with data from the {@link Cursor}
+	 * @param cursor {@link Cursor} containing the data.
+	 */
 	public void populateData(Cursor cursor)
 	{
 		final String strName, strUserName, strPassword, strNotes;
 
-		if (cursor != null)
+		if (GPCursorHelper.hasRecords(cursor))
 		{
 			cursor.moveToFirst();
 
@@ -198,6 +228,58 @@ public class PasswordDetails extends FragmentActivity implements LoaderCallbacks
 
 		_initialVals = new DataSnapshot();
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.delete, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		boolean bHandled = true;
+
+		switch (item.getItemId())
+		{
+			case R.id.mniDelete:
+				getContentResolver().delete(CONTENT_URI, 
+						_strFilter, new String[]{Long.toString(_lRowID)});
+				finish();
+				break;
+
+			default:
+				bHandled = super.onOptionsItemSelected(item);
+				break;
+		}
+
+		return bHandled;
+	}
+	
+	/**
+	 * Enable/Disables the editible fields in the form.
+	 * @param bEnabled <code>true</code> to enable the fields, <code>false</code>
+	 * to disable.
+	 */
+	private void enableForm(final boolean bEnabled)
+	{
+		_edtName.setEnabled(bEnabled && (_lRowID == NEW_RECORD));
+		_edtUserNanme.setEnabled(bEnabled);
+		_edtPassword.setEnabled(bEnabled);
+		_edtNotes.setEnabled(bEnabled);
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		if (_edtName.getText().toString().equals(""))
+			Toast.makeText(this, "You must enter a name.", Toast.LENGTH_LONG).show();
+		else
+			super.onBackPressed();
+	}
+
+
 
 	/**
 	 * Takes a snapshot of the data at the current time.
