@@ -42,10 +42,36 @@ public class MasterPasswordScreen extends FragmentActivity
 	{
 		Toast.makeText(this, "OK button clicked", Toast.LENGTH_LONG).show();
 		
-		final String strOldPassword = DBHelper.getMasterPassword(getContentResolver());
-		final String strNewPassword = 
-				
-		if 
+		final String strOldDBPassword = DBHelper.getMasterPassword(getContentResolver());
+		final String strOldPassword = _edtOldPassword.getText().toString();
+		final String strNewPassword = _edtOldPassword.getText().toString();
+		final String strConfirmPassword = _edtConfirmPassword.getText().toString();
+			
+		if (strOldPassword.equals(strOldDBPassword))
+		{
+			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+			dlg.setTitle("Error");
+			dlg.setMessage("The old password is incorrect, please try again");
+			dlg.setPositiveButton("OK", null);
+			dlg.show();
+		}
+		else if (strNewPassword.equals(strConfirmPassword))
+		{
+			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+			dlg.setTitle("Error");
+			dlg.setMessage("The passwords do not match, please try again");
+			dlg.setPositiveButton("OK", null);
+			dlg.show();
+		}
+		else
+		{
+			// Change password.
+			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+			dlg.setTitle("Error");
+			dlg.setMessage("Needs Implementing");
+			dlg.setPositiveButton("OK", null);
+			dlg.show();
+		}
 	}
 	
 	public void btnCancel_Click(View view)
